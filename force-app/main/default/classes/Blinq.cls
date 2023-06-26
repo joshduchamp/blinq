@@ -1,6 +1,8 @@
 global class Blinq {
     private List<SObject> objList;
     private Map<String, Map<Id,SObject>> joinMap = new Map<String, Map<Id,SObject>>();
+    private List<BlinqFilter> filterList = new List<BlinqFilter>();
+    private Boolean filtersExecuted = false;
 
     private Blinq(List<SObject> collection) {
         this.objList = collection;
@@ -16,10 +18,12 @@ global class Blinq {
     }
 
     global List<SObject> toList() {
+        tryFilter();
         return this.objList;
     }
 
     global Set<String> toStringSet(String fieldName) {
+        tryFilter();
         Set<String> objSet = new Set<String>();
         for (SObject sobj : this.objList) {
             objSet.add((String) sobj.get(fieldName));
@@ -28,10 +32,12 @@ global class Blinq {
     }
 
     global Set<Id> toIdSet() {
+        tryFilter();
         return toIdSetOn('Id');
     }
 
     global Set<Id> toIdSetOn(String fieldName) {
+        tryFilter();
         Set<Id> objSet = new Set<Id>();
         for (SObject sobj : this.objList) {
             objSet.add((Id) sobj.get(fieldName));
@@ -40,6 +46,7 @@ global class Blinq {
     }
 
     global Map<String, SObject> toStringMapOn(String fieldName) {
+        tryFilter();
         Map<String, SObject> objMap = new Map<String, SObject>();
         for (SObject sobj : this.objList) {
             objMap.put((String) sobj.get(fieldName), sobj);
@@ -48,6 +55,7 @@ global class Blinq {
     }
 
     global Map<String, List<SObject>> toStringMapListOn(String fieldName) {
+        tryFilter();
         Map<String, List<SObject>> objListMap = new Map<String, List<SObject>>();
         for (SObject sobj : this.objList) {
             String key = (String) sobj.get(fieldName);
@@ -62,10 +70,12 @@ global class Blinq {
     }
 
     global Map<Id, SObject> toIdMap() {
+        tryFilter();
         return toIdMapOn('Id');
     }
 
     global Map<Id, SObject> toIdMapOn(String fieldName) {
+        tryFilter();
         Map<Id, SObject> objMap = new Map<Id, SObject>();
         for (SObject sobj : this.objList) {
             objMap.put((Id) sobj.get(fieldName), sobj);
@@ -74,6 +84,7 @@ global class Blinq {
     }
 
     global Map<Id, List<SObject>> toIdMapListOn(String fieldName) {
+        tryFilter();
         Map<Id, List<SObject>> objListMap = new Map<Id, List<SObject>>();
         for (SObject sobj : this.objList) {
             Id key = (Id) sobj.get(fieldName);
@@ -87,81 +98,57 @@ global class Blinq {
         return objListMap;
     }
 
-    global String fieldName;
-    global Blinq filterOn(String fieldName) {
-        this.fieldName = fieldName;
-        return this;
+    global BlinqFilter filterOn(String fieldName) {
+        System.debug('in filterOn');
+        BlinqFilter filter = new BlinqFilter(this, fieldName);
+        this.filterList.add(filter);
+        return filter;
     }
 
-    global Blinq equals(Object value) {
-        return compare(new BlinqCompareEquals(), value);
-    }
-
-    global Blinq equals(String alias, String fieldName) {
-        return compare(new BlinqCompareEquals(), alias, fieldName);
-    }
-
-    global Blinq notEquals(Object value) {
-        return compare(new BlinqCompareNotEquals(), value);
-    }
-
-    global Blinq notEquals(String alias, String fieldName) {
-        return compare(new BlinqCompareNotEquals(), alias, fieldName);
-    }
-
-    global Blinq greaterThan(Object value) {
-        return compare(new BlinqCompareGreaterThan(), value);
-    }
-
-    global Blinq greaterThan(String alias, String fieldName) {
-        return compare(new BlinqCompareGreaterThan(), alias, fieldName);
-    }
-
-    global Blinq greaterThanOrEqualTo(Object value) {
-        return compare(new BlinqCompareGreaterThanOrEqualTo(), value);
-    }
-
-    global Blinq greaterThanOrEqualTo(String alias, String fieldName) {
-        return compare(new BlinqCompareGreaterThanOrEqualTo(), alias, fieldName);
-    }
-
-    global Blinq lessThan(Object value) {
-        return compare(new BlinqCompareLessThan(), value);
-    }
-
-    global Blinq lessThan(String alias, String fieldName) {
-        return compare(new BlinqCompareLessThan(), alias, fieldName);
-    }
-
-    global Blinq lessThanOrEqualTo(Object value) {
-        return compare(new BlinqCompareLessThanOrEqualTo(), value);
-    }
-
-    global Blinq lessThanOrEqualTo(String alias, String fieldName) {
-        return compare(new BlinqCompareLessThanOrEqualTo(), alias, fieldName);
-    }
-
-    private Blinq compare(IBlinqCompare comparer, Object value) {
-        List<SObject> filteredList = new List<SObject>();
-        for (SObject sobj : this.objList) {
-            if (comparer.compare(sobj.get(this.fieldName), value)) {
-                filteredList.add(sobj);
+    global Blinq any() {
+        System.debug('in any()');
+        this.filtersExecuted = true;
+        if (!this.filterList.isEmpty()) {
+            System.debug('filters not empty');
+            List<SObject> filteredObjects = new List<SObject>();
+            for (SObject sobj : this.objList) {
+                for (BlinqFilter filter : this.filterList) {
+                    if (filter.result(sobj, this.joinMap)) {
+                        filteredObjects.add(sobj);
+                        break;
+                    }
+                }
             }
+            this.objList = filteredObjects;
         }
-        this.objList = filteredList;
+        return this;
+    }
+    
+    global Blinq all() {
+        this.filtersExecuted = true;
+        if (!this.filterList.isEmpty()) {
+            List<SObject> filteredObjects = new List<SObject>();
+            for (SObject sobj : this.objList) {
+                Boolean allFiltersTrue = true;
+                for (BlinqFilter filter : filterList) {
+                    if (!filter.result(sobj, this.joinMap)) {
+                        allFiltersTrue = false;
+                        break;
+                    }
+                }
+                if (allFiltersTrue) {
+                    filteredObjects.add(sobj);
+                }
+            }
+            this.objList = filteredObjects;
+        }
         return this;
     }
 
-    private Blinq compare(IBlinqCompare comparer, String alias, String aliasFieldName) {
-        List<SObject> filteredList = new List<SObject>();
-        for (SObject sobj : this.objList) {
-            SObject aliasObj = joinMap.get(alias).get(sobj.Id);
-            if (comparer.compare(sobj.get(this.fieldName), aliasObj.get(aliasFieldName))) {
-                filteredList.add(sobj);
-            }
+    private void tryFilter() {
+        if (!this.filtersExecuted) {
+            any();
         }
-        this.objList = filteredList;
-        return this;
     }
 
     public class BlinqException extends Exception {}

@@ -272,4 +272,52 @@ public class BlinqTest {
         Assert.areEqual(1, myLst.size());
         Assert.areEqual('Wayne', myLst[0].LastName);
     }
+
+    @IsTest
+    static void testAny() {
+        List<Contact> lst = new List<Contact>{
+            new Contact(Id = '0035300000H2LFdAAN', LastName = 'Wayne'),
+            new Contact(Id = '0035300000H2LFiAAN', LastName = 'Lane')
+        };
+        Map<Id,Contact> oldMap = new Map<Id,Contact>();
+        oldMap.put('0035300000H2LFdAAN', new Contact(Id = '0035300000H2LFdAAN', LastName = 'notWayne'));
+        oldMap.put('0035300000H2LFiAAN', new Contact(Id = '0035300000H2LFiAAN', LastName = 'Lane'));
+
+        Test.startTest();
+        List<Contact> myLst = Blinq.my(lst)
+            .leftJoin(oldMap, 'old')
+            .filterOn('FirstName').notEquals('old', 'FirstName')
+            .filterOn('LastName').notEquals('old', 'LastName')
+            .any()
+            .toList();
+        Test.stopTest();
+
+        Assert.areEqual(2, lst.size());
+        Assert.areEqual(1, myLst.size());
+        Assert.areEqual('Wayne', myLst[0].LastName);
+    }
+
+    @IsTest
+    static void testAll() {
+        List<Contact> lst = new List<Contact>{
+            new Contact(Id = '0035300000H2LFdAAN', LastName = 'Wayne'),
+            new Contact(Id = '0035300000H2LFiAAN', LastName = 'Lane')
+        };
+        Map<Id,Contact> oldMap = new Map<Id,Contact>();
+        oldMap.put('0035300000H2LFdAAN', new Contact(Id = '0035300000H2LFdAAN', LastName = 'notWayne'));
+        oldMap.put('0035300000H2LFiAAN', new Contact(Id = '0035300000H2LFiAAN', LastName = 'Lane'));
+
+        Test.startTest();
+        List<Contact> myLst = Blinq.my(lst)
+            .leftJoin(oldMap, 'old')
+            .filterOn('FirstName').Equals('old', 'FirstName')
+            .filterOn('LastName').Equals('old', 'LastName')
+            .all()
+            .toList();
+        Test.stopTest();
+
+        Assert.areEqual(2, lst.size());
+        Assert.areEqual(1, myLst.size());
+        Assert.areEqual('Lane', myLst[0].LastName);
+    }
 }
