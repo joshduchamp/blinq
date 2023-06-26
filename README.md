@@ -8,9 +8,9 @@ A predominent part of apex is bulk processing collections of data. This can resu
 
 Clone this repository to get the Blinq library and deploy it to your org.
 
-Or download in prod from https://login.salesforce.com/packaging/installPackage.apexp?p0=04t5G00000480nCQAQ 
+Or download in prod from https://login.salesforce.com/packaging/installPackage.apexp?p0=04t5G00000480nHQAQ
 
-Or download in sandbox from https://test.salesforce.com/packaging/installPackage.apexp?p0=04t5G00000480nCQAQ 
+Or download in sandbox from https://test.salesforce.com/packaging/installPackage.apexp?p0=04t5G00000480nHQAQ 
 
 ## Examples
 
@@ -30,4 +30,10 @@ Map<Id,List<SObject>> myMap = Blinq.my(contacts).toIdMapListOn('AccountId');
 // filter on contacts over 21 and return in a map
 Date dt = Date.today().addYears(-21);
 Map<Id,SObject> over21 = Blinq.my(contacts).filterOn('Birthdate').lessThanOrEqualTo(dt).toIdMap();
+
+// filter on contacts whose last name changed
+List<Contact> filtered = Blinq.my(contacts)
+    .leftJoin(oldMap, 'old')
+    .filterOn('LastName').notEqualTo('old', 'LastName')
+    .toList();
 ```

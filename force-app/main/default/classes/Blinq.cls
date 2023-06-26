@@ -1,5 +1,6 @@
 global class Blinq {
     private List<SObject> objList;
+    private Map<String, Map<Id,SObject>> joinMap = new Map<String, Map<Id,SObject>>();
 
     private Blinq(List<SObject> collection) {
         this.objList = collection;
@@ -7,6 +8,11 @@ global class Blinq {
 
     public static Blinq my(List<SObject> collection) {
         return new Blinq(collection);
+    }
+
+    global Blinq leftJoin(Map<Id,SObject> objMap, String alias) {
+        joinMap.put(alias, objMap);
+        return this;
     }
 
     global List<SObject> toList() {
@@ -91,24 +97,48 @@ global class Blinq {
         return compare(new BlinqCompareEquals(), value);
     }
 
+    global Blinq equals(String alias, String fieldName) {
+        return compare(new BlinqCompareEquals(), alias, fieldName);
+    }
+
     global Blinq notEquals(Object value) {
         return compare(new BlinqCompareNotEquals(), value);
+    }
+
+    global Blinq notEquals(String alias, String fieldName) {
+        return compare(new BlinqCompareNotEquals(), alias, fieldName);
     }
 
     global Blinq greaterThan(Object value) {
         return compare(new BlinqCompareGreaterThan(), value);
     }
 
+    global Blinq greaterThan(String alias, String fieldName) {
+        return compare(new BlinqCompareGreaterThan(), alias, fieldName);
+    }
+
     global Blinq greaterThanOrEqualTo(Object value) {
         return compare(new BlinqCompareGreaterThanOrEqualTo(), value);
+    }
+
+    global Blinq greaterThanOrEqualTo(String alias, String fieldName) {
+        return compare(new BlinqCompareGreaterThanOrEqualTo(), alias, fieldName);
     }
 
     global Blinq lessThan(Object value) {
         return compare(new BlinqCompareLessThan(), value);
     }
 
+    global Blinq lessThan(String alias, String fieldName) {
+        return compare(new BlinqCompareLessThan(), alias, fieldName);
+    }
+
     global Blinq lessThanOrEqualTo(Object value) {
         return compare(new BlinqCompareLessThanOrEqualTo(), value);
+    }
+
+    global Blinq lessThanOrEqualTo(String alias, String fieldName) {
+        return compare(new BlinqCompareLessThanOrEqualTo(), alias, fieldName);
     }
 
     private Blinq compare(IBlinqCompare comparer, Object value) {
@@ -121,4 +151,18 @@ global class Blinq {
         this.objList = filteredList;
         return this;
     }
+
+    private Blinq compare(IBlinqCompare comparer, String alias, String aliasFieldName) {
+        List<SObject> filteredList = new List<SObject>();
+        for (SObject sobj : this.objList) {
+            SObject aliasObj = joinMap.get(alias).get(sobj.Id);
+            if (comparer.compare(sobj.get(this.fieldName), aliasObj.get(aliasFieldName))) {
+                filteredList.add(sobj);
+            }
+        }
+        this.objList = filteredList;
+        return this;
+    }
+
+    public class BlinqException extends Exception {}
 }
