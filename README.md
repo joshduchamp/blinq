@@ -8,6 +8,10 @@ A predominent part of apex is bulk processing collections of data. This can resu
 
 Clone this repository to get the Blinq library and deploy it to your org.
 
+Or download in prod from https://login.salesforce.com/packaging/installPackage.apexp?p0=04t5G00000480nCQAQ 
+
+Or download in sandbox from https://test.salesforce.com/packaging/installPackage.apexp?p0=04t5G00000480nCQAQ 
+
 ## Examples
 
 ```apex
