@@ -132,6 +132,19 @@ public class BlinqTest {
     }
 
     @IsTest
+    static void testFilterOnIsNull() {
+        List<Contact> lst = new List<Contact>{ new Contact(AccountId = '0015300000PFOIaAAP'), new Contact() };
+
+        Test.startTest();
+        List<Contact> myLst = Blinq.my(lst).filterOn('AccountId').equals(null).toList();
+        Test.stopTest();
+
+        Assert.areEqual(2, lst.size());
+        Assert.areEqual(1, myLst.size());
+        Assert.areEqual(null, myLst[0].AccountId);
+    }
+
+    @IsTest
     static void testFilterOnNotEquals() {
         List<Contact> lst = new List<Contact>{ new Contact(LastName = 'Wayne'), new Contact(LastName = 'Lane') };
 
@@ -142,6 +155,19 @@ public class BlinqTest {
         Assert.areEqual(2, lst.size());
         Assert.areEqual(1, myLst.size());
         Assert.areEqual('Lane', myLst[0].LastName);
+    }
+
+    @IsTest
+    static void testFilterOnIsNotNull() {
+        List<Contact> lst = new List<Contact>{ new Contact(AccountId = '0015300000PFOIaAAP'), new Contact() };
+
+        Test.startTest();
+        List<Contact> myLst = Blinq.my(lst).filterOn('AccountId').notEquals(null).toList();
+        Test.stopTest();
+
+        Assert.areEqual(2, lst.size());
+        Assert.areEqual(1, myLst.size());
+        Assert.areEqual('0015300000PFOIaAAP', myLst[0].AccountId);
     }
 
     @IsTest
