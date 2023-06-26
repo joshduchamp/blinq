@@ -1,18 +1,28 @@
-# Salesforce DX Project: Next Steps
+# Blinq Apex Collection Library
 
-Now that you’ve created a Salesforce DX project, what’s next? Here are some documentation resources to get you started.
+Blinq is library in apex loosely modeled after C#'s Linq library to be able to easily manipulate collections of sobject.
 
-## How Do You Plan to Deploy Your Changes?
+A predominent part of apex is bulk processing collections of data. This can result in a lot of code around loops lists to build maps and sets. This library aims to make those operations easier and more readable. 
 
-Do you want to deploy a set of changes, or create a self-contained application? Choose a [development model](https://developer.salesforce.com/tools/vscode/en/user-guide/development-models).
+## Installation
 
-## Configure Your Salesforce DX Project
+Clone this repository to get the Blinq library and deploy it to your org.
 
-The `sfdx-project.json` file contains useful configuration information for your project. See [Salesforce DX Project Configuration](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_ws_config.htm) in the _Salesforce DX Developer Guide_ for details about this file.
+## Examples
 
-## Read All About It
+```apex
+// create a set of ids from a list of contacts
+Set<Id> contactIds = Blinq.my(contacts).toIdSet();
 
-- [Salesforce Extensions Documentation](https://developer.salesforce.com/tools/vscode/)
-- [Salesforce CLI Setup Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_setup.meta/sfdx_setup/sfdx_setup_intro.htm)
-- [Salesforce DX Developer Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_intro.htm)
-- [Salesforce CLI Command Reference](https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference.htm)
+// create a set of account ids from a list of contacts
+Set<Id> accountIds = Blinq.my(contacts).toIdSetOn('AccountId');
+
+// filter on contacts with an account
+List<Contact> contactsWithAccount = Blinq.my(contacts).filterOn('AccountId').notEquals(null).toList();
+
+// create a map of contacts on account id
+Map<Id,List<SObject>> myMap = Blinq.my(contacts).toIdMapListOn('AccountId');
+
+// filter on contacts over 21 and return in a map
+Map<Id,SObject> over21 = Blinq.my(contacts).filterOn('Birthdate').lessThanOrEqualTo(Date.today().addYears(-21)).toIdMap();
+```
