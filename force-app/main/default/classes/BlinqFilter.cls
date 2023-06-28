@@ -26,78 +26,78 @@ global class BlinqFilter {
         return this.comparer.compare(objA, objB);
     }
 
-    public Blinq equals(Object value) {
+    global Blinq equals(Object value) {
         this.comparer = new BlinqCompareEquals();
         this.value = value;
         return this.blinqObj;
     }
 
-    public Blinq equals(String alias, String fieldName) {
+    global Blinq equals(String alias, String fieldName) {
         this.comparer = new BlinqCompareEquals();
         this.alias = alias;
         this.aliasFieldName = fieldName;
         return this.blinqObj;
     }
 
-    public Blinq notEquals(Object value) {
+    global Blinq notEquals(Object value) {
         this.comparer = new BlinqCompareNotEquals();
         this.value = value;
         return this.blinqObj;
     }
 
-    public Blinq notEquals(String alias, String fieldName) {
+    global Blinq notEquals(String alias, String fieldName) {
         this.comparer = new BlinqCompareNotEquals();
         this.alias = alias;
         this.aliasFieldName = fieldName;
         return this.blinqObj;
     }
 
-    public Blinq greaterThan(Object value) {
+    global Blinq greaterThan(Object value) {
         this.comparer = new BlinqCompareGreaterThan();
         this.value = value;
         return this.blinqObj;
     }
 
-    public Blinq greaterThan(String alias, String fieldName) {
+    global Blinq greaterThan(String alias, String fieldName) {
         this.comparer = new BlinqCompareGreaterThan();
         this.alias = alias;
         this.aliasFieldName = fieldName;
         return this.blinqObj;
     }
 
-    public Blinq greaterThanOrEqualTo(Object value) {
+    global Blinq greaterThanOrEqualTo(Object value) {
         this.comparer = new BlinqCompareGreaterThanOrEqualTo();
         this.value = value;
         return this.blinqObj;
     }
 
-    public Blinq greaterThanOrEqualTo(String alias, String fieldName) {
+    global Blinq greaterThanOrEqualTo(String alias, String fieldName) {
         this.comparer = new BlinqCompareGreaterThanOrEqualTo();
         this.alias = alias;
         this.aliasFieldName = fieldName;
         return this.blinqObj;
     }
 
-    public Blinq lessThan(Object value) {
+    global Blinq lessThan(Object value) {
         this.comparer = new BlinqCompareLessThan();
         this.value = value;
         return this.blinqObj;
     }
 
-    public Blinq lessThan(String alias, String fieldName) {
+    global Blinq lessThan(String alias, String fieldName) {
         this.comparer = new BlinqCompareLessThan();
         this.alias = alias;
         this.aliasFieldName = fieldName;
         return this.blinqObj;
     }
 
-    public Blinq lessThanOrEqualTo(Object value) {
+    global Blinq lessThanOrEqualTo(Object value) {
         this.comparer = new BlinqCompareLessThanOrEqualTo();
         this.value = value;
         return this.blinqObj;
     }
 
-    public Blinq lessThanOrEqualTo(String alias, String fieldName) {
+    global Blinq lessThanOrEqualTo(String alias, String fieldName) {
         this.comparer = new BlinqCompareLessThanOrEqualTo();
         this.alias = alias;
         this.aliasFieldName = fieldName;

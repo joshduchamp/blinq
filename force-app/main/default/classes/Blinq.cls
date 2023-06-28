@@ -8,7 +8,7 @@ global class Blinq {
         this.objList = collection;
     }
 
-    public static Blinq my(List<SObject> collection) {
+    global static Blinq my(List<SObject> collection) {
         return new Blinq(collection);
     }
 
