@@ -8,9 +8,9 @@ A predominent part of apex is bulk processing collections of data. This can resu
 
 Clone this repository to get the Blinq library and deploy it to your org.
 
-Or download in prod from https://login.salesforce.com/packaging/installPackage.apexp?p0=04t5G00000480nMQAQ
+Or download in prod from https://login.salesforce.com/packaging/installPackage.apexp?p0=04t5G00000480nbQAA
 
-Or download in sandbox from https://test.salesforce.com/packaging/installPackage.apexp?p0=04t5G00000480nMQAQ
+Or download in sandbox from https://test.salesforce.com/packaging/installPackage.apexp?p0=04t5G00000480nbQAA
 
 ## Examples
 
@@ -23,6 +23,9 @@ Set<Id> accountIds = Blinq.my(contacts).toIdSetOn('AccountId');
 
 // filter on contacts with an account
 List<Contact> filtered = Blinq.my(contacts).filterOn('AccountId').notEquals(null).toList();
+
+// get a set of account names
+List<String> accountNames = Blinq.my(contacts).toStringSetOn('Account.Name');
 
 // create a map of contacts on account id
 Map<Id,List<SObject>> myMap = Blinq.my(contacts).toIdMapListOn('AccountId');
