@@ -147,7 +147,7 @@ global class Blinq {
 
     private void tryFilter() {
         if (!this.filtersExecuted) {
-            any();
+            all();
         }
     }
 
