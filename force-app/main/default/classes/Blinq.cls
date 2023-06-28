@@ -22,7 +22,7 @@ global class Blinq {
         return this.objList;
     }
 
-    global Set<String> toStringSet(String fieldName) {
+    global Set<String> toStringSetOn(String fieldName) {
         tryFilter();
         Set<String> objSet = new Set<String>();
         for (SObject sobj : this.objList) {
