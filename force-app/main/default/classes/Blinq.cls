@@ -26,7 +26,7 @@ global class Blinq {
         tryFilter();
         Set<String> objSet = new Set<String>();
         for (SObject sobj : this.objList) {
-            objSet.add((String) sobj.get(fieldName));
+            objSet.add((String) BlinqFieldValue.resolve(sobj, fieldName));
         }
         return objSet;
     }
@@ -40,7 +40,7 @@ global class Blinq {
         tryFilter();
         Set<Id> objSet = new Set<Id>();
         for (SObject sobj : this.objList) {
-            objSet.add((Id) sobj.get(fieldName));
+            objSet.add((Id) BlinqFieldValue.resolve(sobj, fieldName));
         }
         return objSet;
     }
@@ -49,7 +49,7 @@ global class Blinq {
         tryFilter();
         Map<String, SObject> objMap = new Map<String, SObject>();
         for (SObject sobj : this.objList) {
-            objMap.put((String) sobj.get(fieldName), sobj);
+            objMap.put((String) BlinqFieldValue.resolve(sobj, fieldName), sobj);
         }
         return objMap;
     }
@@ -58,7 +58,7 @@ global class Blinq {
         tryFilter();
         Map<String, List<SObject>> objListMap = new Map<String, List<SObject>>();
         for (SObject sobj : this.objList) {
-            String key = (String) sobj.get(fieldName);
+            String key = (String) BlinqFieldValue.resolve(sobj, fieldName);
             List<SObject> objList = objListMap.get(key);
             if (objList == null) {
                 objList = new List<SObject>();
@@ -78,7 +78,7 @@ global class Blinq {
         tryFilter();
         Map<Id, SObject> objMap = new Map<Id, SObject>();
         for (SObject sobj : this.objList) {
-            objMap.put((Id) sobj.get(fieldName), sobj);
+            objMap.put((Id) BlinqFieldValue.resolve(sobj, fieldName), sobj);
         }
         return objMap;
     }
@@ -87,7 +87,7 @@ global class Blinq {
         tryFilter();
         Map<Id, List<SObject>> objListMap = new Map<Id, List<SObject>>();
         for (SObject sobj : this.objList) {
-            Id key = (Id) sobj.get(fieldName);
+            Id key = (Id) BlinqFieldValue.resolve(sobj, fieldName);
             List<SObject> objList = objListMap.get(key);
             if (objList == null) {
                 objList = new List<SObject>();

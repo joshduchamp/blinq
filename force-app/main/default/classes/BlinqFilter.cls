@@ -13,11 +13,11 @@ global class BlinqFilter {
     }
 
     public Boolean result(SObject sobj, Map<String, Map<Id,SObject>> joinMap) {
-        Object objA = sobj.get(this.fieldName);
+        Object objA = BlinqFieldValue.resolve(sobj, this.fieldName);
         Object objB = null;
         if (this.isJoinedFilter) {
             SObject aliasObj = joinMap.get(this.alias).get(sobj.Id);
-            objB = aliasObj == null ? null : aliasObj.get(this.aliasFieldName);
+            objB = aliasObj == null ? null : BlinqFieldValue.resolve(aliasObj, this.aliasFieldName);
         } else {
             objB = this.value;
         }
