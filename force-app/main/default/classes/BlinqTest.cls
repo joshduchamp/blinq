@@ -255,6 +255,82 @@ public class BlinqTest {
     }
 
     @IsTest
+    static void testStartsWith() {
+        List<Contact> lst = new List<Contact>{ new Contact(LastName = 'Wayne'), new Contact(LastName = 'Lane') };
+
+        Test.startTest();
+        List<Contact> myLst = Blinq.my(lst).filterOn('LastName').startsWith('Way').toList();
+        Test.stopTest();
+
+        Assert.areEqual(2, lst.size());
+        Assert.areEqual(1, myLst.size());
+        Assert.areEqual('Wayne', myLst[0].LastName);
+    }
+
+    @IsTest
+    static void testEndsWith() {
+        List<Contact> lst = new List<Contact>{ new Contact(LastName = 'Wayne'), new Contact(LastName = 'Lane') };
+
+        Test.startTest();
+        List<Contact> myLst = Blinq.my(lst).filterOn('LastName').endsWith('ne').toList();
+        Test.stopTest();
+
+        Assert.areEqual(2, lst.size());
+        Assert.areEqual(2, myLst.size());
+    }
+
+    @IsTest
+    static void testContains() {
+        List<Contact> lst = new List<Contact>{ new Contact(LastName = 'Wayne'), new Contact(LastName = 'Lane') };
+
+        Test.startTest();
+        List<Contact> myLst = Blinq.my(lst).filterOn('LastName').contains('ayn').toList();
+        Test.stopTest();
+
+        Assert.areEqual(2, lst.size());
+        Assert.areEqual(1, myLst.size());
+        Assert.areEqual('Wayne', myLst[0].LastName);
+    }
+
+    @IsTest
+    static void testIsIn() {
+        List<Contact> lst = new List<Contact>{ new Contact(LastName = 'Wayne'), new Contact(LastName = 'Lane') };
+
+        Test.startTest();
+        List<Contact> myLst = Blinq.my(lst).filterOn('LastName').isIn(new List<String>{ 'Wayne', 'Lane' }).toList();
+        Test.stopTest();
+
+        Assert.areEqual(2, lst.size());
+        Assert.areEqual(2, myLst.size());
+    }
+
+    @IsTest
+    static void testIsNull() {
+        List<Contact> lst = new List<Contact>{ new Contact(FirstName = null, LastName = 'Wayne'), new Contact(FirstName = 'Lois', LastName = 'Lane') };
+
+        Test.startTest();
+        List<Contact> myLst = Blinq.my(lst).filterOn('FirstName').isNull().toList();
+        Test.stopTest();
+
+        Assert.areEqual(2, lst.size());
+        Assert.areEqual(1, myLst.size());
+        Assert.areEqual('Wayne', myLst[0].LastName);
+    }
+
+    @IsTest
+    static void testisNotNull() {
+        List<Contact> lst = new List<Contact>{ new Contact(FirstName = null, LastName = 'Wayne'), new Contact(FirstName = 'Lois', LastName = 'Lane') };
+
+        Test.startTest();
+        List<Contact> myLst = Blinq.my(lst).filterOn('FirstName').isNotNull().toList();
+        Test.stopTest();
+
+        Assert.areEqual(2, lst.size());
+        Assert.areEqual(1, myLst.size());
+        Assert.areEqual('Lane', myLst[0].LastName);
+    }
+
+    @IsTest
     static void testJoinAndCompare() {
         List<Contact> lst = new List<Contact>{
             new Contact(Id = '0035300000H2LFdAAN', LastName = 'Wayne'),
@@ -330,6 +406,30 @@ public class BlinqTest {
     }
 
     @IsTest
+    static void testCustomLogic() {
+        List<Contact> lst = new List<Contact>{
+            new Contact(Id = '0035300000H2LFdAAN', LastName = 'Wayne', AccountId = '0015300000PFOIaAAP'),
+            new Contact(Id = '0035300000H2LFiAAN', LastName = 'Lane', AccountId = '0015300000PFOIaAAP')
+        };
+        Map<Id, Contact> oldMap = new Map<Id, Contact>();
+        oldMap.put('0035300000H2LFdAAN', new Contact(Id = '0035300000H2LFdAAN', LastName = 'notWayne'));
+        oldMap.put('0035300000H2LFiAAN', new Contact(Id = '0035300000H2LFiAAN', LastName = 'Lane'));
+
+        Test.startTest();
+        List<Contact> myLst = Blinq.my(lst)
+            .leftJoin(oldMap, 'old')
+            .filterOn('AccountId').equals('0015300000PFOIaAAP')
+            .filterOn('LastName').equals('Lane')
+            .customLogic('1 AND NOT 2')
+            .toList();
+        Test.stopTest();
+
+        Assert.areEqual(2, lst.size());
+        Assert.areEqual(1, myLst.size());
+        Assert.areEqual('Wayne', myLst[0].LastName);
+    }
+
+    @IsTest
     static void testNestedValues() {
         Account acctObj = new Account(Name = 'ACME');
         List<Contact> contacts = new List<Contact>{ new Contact(Account = acctObj) };
@@ -339,5 +439,60 @@ public class BlinqTest {
         Test.stopTest();
 
         Assert.isTrue(accountNames.contains('ACME'));
+    }
+
+    @IsTest
+    static void testFirst() {
+        List<Contact> contacts = new List<Contact>{ new Contact(LastName = 'Wayne'), new Contact(LastName = 'Lane')};
+
+        Test.startTest();
+        Contact conObj = (Contact)Blinq.my(contacts).first();
+        Test.stopTest();
+
+        Assert.areEqual('Wayne', conObj.LastName);
+    }
+
+    @IsTest
+    static void testFirstNull() {
+        List<Contact> contacts = new List<Contact>();
+
+        Test.startTest();
+        Contact conObj = (Contact)Blinq.my(contacts).first();
+        Test.stopTest();
+
+        Assert.isNull(conObj);
+    }
+
+    @IsTest
+    static void testLastNull() {
+        List<Contact> contacts = new List<Contact>();
+
+        Test.startTest();
+        Contact conObj = (Contact)Blinq.my(contacts).last();
+        Test.stopTest();
+
+        Assert.isNull(conObj);
+    }
+
+    @IsTest
+    static void testFilterOnAlias() {
+        List<Contact> lst = new List<Contact>{
+            new Contact(Id = '0035300000H2LFdAAN', LastName = 'Wayne'),
+            new Contact(Id = '0035300000H2LFiAAN', LastName = 'Lane')
+        };
+        Map<Id, Contact> oldMap = new Map<Id, Contact>();
+        oldMap.put('0035300000H2LFdAAN', new Contact(Id = '0035300000H2LFdAAN', LastName = 'notWayne'));
+
+        Test.startTest();
+        List<Contact> myLst = Blinq.my(lst)
+            .leftJoin(oldMap, 'old')
+            .filterOn('old', 'Id')
+            .Equals(null)
+            .toList();
+        Test.stopTest();
+
+        Assert.areEqual(2, lst.size());
+        Assert.areEqual(1, myLst.size());
+        Assert.areEqual('Lane', myLst[0].LastName);
     }
 }

@@ -4,6 +4,7 @@ global class BlinqFilter {
     private IBlinqCompare comparer;
     private Object value;
     private String alias;
+    private String aliasLeft;
     private String aliasFieldName;
     private Boolean isJoinedFilter { get { return this.alias != null; } }
 
@@ -12,8 +13,20 @@ global class BlinqFilter {
         this.fieldName = fieldName;
     }
 
+    public BlinqFilter(Blinq blinqObj, String alias, String fieldName) {
+        this.blinqObj = blinqObj;
+        this.aliasLeft = alias;
+        this.fieldName = fieldName;
+    }
+
     public Boolean result(SObject sobj, Map<String, Map<Id,SObject>> joinMap) {
-        Object objA = BlinqFieldValue.resolve(sobj, this.fieldName);
+        Object objA = null;
+        if (this.aliasLeft == null) {
+            objA = BlinqFieldValue.resolve(sobj, this.fieldName);
+        } else {
+            SObject aliasObj = joinMap.get(this.aliasLeft).get(sobj.Id);
+            objA = aliasObj == null ? null : BlinqFieldValue.resolve(aliasObj, this.fieldName);
+        }
         Object objB = null;
         if (this.isJoinedFilter) {
             SObject aliasObj = joinMap.get(this.alias).get(sobj.Id);
@@ -103,4 +116,62 @@ global class BlinqFilter {
         this.aliasFieldName = fieldName;
         return this.blinqObj;
     }
+
+    global Blinq startsWith(String value) {
+        this.comparer = new BlinqCompareStartsWith();
+        this.value = value;
+        return this.blinqObj;
+    }
+
+    global Blinq startsWith(String alias, String fieldName) {
+        this.comparer = new BlinqCompareStartsWith();
+        this.alias = alias;
+        this.aliasFieldName = fieldName;
+        return this.blinqObj;
+    }
+
+    global Blinq endsWith(String value) {
+        this.comparer = new BlinqCompareEndsWith();
+        this.value = value;
+        return this.blinqObj;
+    }
+
+    global Blinq endsWith(String alias, String fieldName) {
+        this.comparer = new BlinqCompareEndsWith();
+        this.alias = alias;
+        this.aliasFieldName = fieldName;
+        return this.blinqObj;
+    }
+
+    global Blinq contains(String value) {
+        this.comparer = new BlinqCompareContains();
+        this.value = value;
+        return this.blinqObj;
+    }
+
+    global Blinq contains(String alias, String fieldName) {
+        this.comparer = new BlinqCompareContains();
+        this.alias = alias;
+        this.aliasFieldName = fieldName;
+        return this.blinqObj;
+    }
+
+    global Blinq isIn(List<Object> value) {
+        this.comparer = new BlinqCompareIsIn();
+        this.value = value;
+        return this.blinqObj;
+    }
+
+    global Blinq isNull() {
+        this.comparer = new BlinqCompareEquals();
+        this.value = null;
+        return this.blinqObj;
+    }
+
+    global Blinq isNotNull() {
+        this.comparer = new BlinqCompareNotEquals();
+        this.value = null;
+        return this.blinqObj;
+    }
+
 }

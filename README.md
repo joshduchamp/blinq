@@ -8,9 +8,9 @@ A predominent part of apex is bulk processing collections of data. This can resu
 
 Clone this repository to get the Blinq library and deploy it to your org.
 
-Or download in prod from https://login.salesforce.com/packaging/installPackage.apexp?p0=04t5G00000480nbQAA
+Or download in prod from https://login.salesforce.com/packaging/installPackage.apexp?p0=04t5G00000480nvQAA
 
-Or download in sandbox from https://test.salesforce.com/packaging/installPackage.apexp?p0=04t5G00000480nbQAA
+Or download in sandbox from https://test.salesforce.com/packaging/installPackage.apexp?p0=04t5G00000480nvQAA
 
 ## Examples
 
@@ -40,5 +40,14 @@ List<Contact> filtered = Blinq.my(contacts)
     .filterOn('FirstName').notEqualTo('old', 'FirstName')
     .filterOn('LastName').notEqualTo('old', 'LastName')
     .any()
+    .toList();
+
+// filter on new contacts or contacts whose name changed and has no account id
+List<Contact> filtered = Blinq.my(contacts)
+    .leftJoin(oldMap, 'old)
+    .filterOn('old', 'Id').isNull()
+    .filterOn('LastName').notEqualTo('old', 'LastName')
+    .filterOn('AccountId').isNull()
+    .customLogic('1 OR (2 AND 3)')
     .toList();
 ```

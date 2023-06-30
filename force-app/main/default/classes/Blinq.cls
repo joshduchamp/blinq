@@ -99,17 +99,20 @@ global class Blinq {
     }
 
     global BlinqFilter filterOn(String fieldName) {
-        System.debug('in filterOn');
         BlinqFilter filter = new BlinqFilter(this, fieldName);
         this.filterList.add(filter);
         return filter;
     }
 
+    global BlinqFilter filterOn(String alias, String fieldName) {
+        BlinqFilter filter = new BlinqFilter(this, alias, fieldName);
+        this.filterList.add(filter);
+        return filter;
+    }
+
     global Blinq any() {
-        System.debug('in any()');
         this.filtersExecuted = true;
         if (!this.filterList.isEmpty()) {
-            System.debug('filters not empty');
             List<SObject> filteredObjects = new List<SObject>();
             for (SObject sobj : this.objList) {
                 for (BlinqFilter filter : this.filterList) {
@@ -130,7 +133,7 @@ global class Blinq {
             List<SObject> filteredObjects = new List<SObject>();
             for (SObject sobj : this.objList) {
                 Boolean allFiltersTrue = true;
-                for (BlinqFilter filter : filterList) {
+                for (BlinqFilter filter : this.filterList) {
                     if (!filter.result(sobj, this.joinMap)) {
                         allFiltersTrue = false;
                         break;
@@ -145,11 +148,43 @@ global class Blinq {
         return this;
     }
 
+    global Blinq customLogic(String conditionalLogic) {
+        this.filtersExecuted = true;
+        if (!this.filterList.isEmpty()) {
+            List<SObject> filteredObjects = new List<SObject>();
+            for (SObject sobj : this.objList) {
+                List<Boolean> values = new List<Boolean>();
+                for (BlinqFilter filter : this.filterList) {
+                    values.add(filter.result(sobj, this.joinMap));
+                }
+                if (BlinqLogic.evaluate(conditionalLogic, values)) {
+                    filteredObjects.add(sobj);
+                }
+            }
+            this.objList = filteredObjects;
+        }
+        return this;
+    }
+
+    global SObject first() {
+        tryFilter();
+        if (this.objList.isEmpty()) {
+            return null;
+        }
+        return this.objList[0];
+    }
+
+    global SObject last() {
+        tryFilter();
+        if (this.objList.isEmpty()) {
+            return null;
+        }
+        return this.objList[this.objList.size()-1];
+    }
+
     private void tryFilter() {
         if (!this.filtersExecuted) {
             all();
         }
     }
-
-    public class BlinqException extends Exception {}
 }
