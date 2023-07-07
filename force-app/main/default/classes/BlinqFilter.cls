@@ -45,6 +45,10 @@ global class BlinqFilter {
         return this.blinqObj;
     }
 
+    global Blinq equals(String alias, Schema.SObjectField field) {
+        return equals(alias, field.getDescribe().getName());
+    }
+
     global Blinq equals(String alias, String fieldName) {
         this.comparer = new BlinqCompareEquals();
         this.alias = alias;
@@ -56,6 +60,10 @@ global class BlinqFilter {
         this.comparer = new BlinqCompareNotEquals();
         this.value = value;
         return this.blinqObj;
+    }
+
+    global Blinq notEquals(String alias, Schema.SObjectField field) {
+        return notEquals(alias, field.getDescribe().getName());
     }
 
     global Blinq notEquals(String alias, String fieldName) {
@@ -71,6 +79,10 @@ global class BlinqFilter {
         return this.blinqObj;
     }
 
+    global Blinq greaterThan(String alias, Schema.SObjectField field) {
+        return greaterThan(alias, field.getDescribe().getName());
+    }
+
     global Blinq greaterThan(String alias, String fieldName) {
         this.comparer = new BlinqCompareGreaterThan();
         this.alias = alias;
@@ -82,6 +94,10 @@ global class BlinqFilter {
         this.comparer = new BlinqCompareGreaterThanOrEqualTo();
         this.value = value;
         return this.blinqObj;
+    }
+
+    global Blinq greaterThanOrEqualTo(Schema.SObjectField field) {
+        return greaterThanOrEqualTo(alias, field.getDescribe().getName());
     }
 
     global Blinq greaterThanOrEqualTo(String alias, String fieldName) {
@@ -97,6 +113,10 @@ global class BlinqFilter {
         return this.blinqObj;
     }
 
+    global Blinq lessThan(String alias, Schema.SObjectField field) {
+        return lessThan(alias, field.getDescribe().getName());
+    }
+
     global Blinq lessThan(String alias, String fieldName) {
         this.comparer = new BlinqCompareLessThan();
         this.alias = alias;
@@ -108,6 +128,10 @@ global class BlinqFilter {
         this.comparer = new BlinqCompareLessThanOrEqualTo();
         this.value = value;
         return this.blinqObj;
+    }
+
+    global Blinq lessThanOrEqualTo(String alias, Schema.SObjectField field) {
+        return lessThanOrEqualTo(alias, field.getDescribe().getName());
     }
 
     global Blinq lessThanOrEqualTo(String alias, String fieldName) {
@@ -123,6 +147,10 @@ global class BlinqFilter {
         return this.blinqObj;
     }
 
+    global Blinq startsWith(String alias, Schema.SObjectField field) {
+        return startsWith(alias, field.getDescribe().getName());
+    }
+
     global Blinq startsWith(String alias, String fieldName) {
         this.comparer = new BlinqCompareStartsWith();
         this.alias = alias;
@@ -136,6 +164,10 @@ global class BlinqFilter {
         return this.blinqObj;
     }
 
+    global Blinq endsWith(String alias, Schema.SObjectField field) {
+        return endsWith(alias, field.getDescribe().getName());
+    }
+
     global Blinq endsWith(String alias, String fieldName) {
         this.comparer = new BlinqCompareEndsWith();
         this.alias = alias;
@@ -147,6 +179,10 @@ global class BlinqFilter {
         this.comparer = new BlinqCompareContains();
         this.value = value;
         return this.blinqObj;
+    }
+
+    global Blinq contains(String alias, Schema.SObjectField field) {
+        return contains(alias, field.getDescribe().getName());
     }
 
     global Blinq contains(String alias, String fieldName) {
