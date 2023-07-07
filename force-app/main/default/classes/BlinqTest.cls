@@ -16,7 +16,7 @@ public class BlinqTest {
         List<Contact> lst = new List<Contact>{ new Contact(LastName = 'Wayne'), new Contact(LastName = 'Wayne') };
 
         Test.startTest();
-        Set<String> mySet = Blinq.my(lst).toStringSetOn('LastName');
+        Set<String> mySet = Blinq.my(lst).toStringSetOn(Contact.LastName);
         Test.stopTest();
 
         Assert.areEqual(1, mySet.size());
@@ -43,7 +43,7 @@ public class BlinqTest {
         List<Contact> lst = new List<Contact>{ new Contact(AccountId = '0015300000PFOIaAAP') };
 
         Test.startTest();
-        Set<Id> mySet = Blinq.my(lst).toIdSetOn('AccountId');
+        Set<Id> mySet = Blinq.my(lst).toIdSetOn(Contact.AccountId);
         Test.stopTest();
 
         Assert.areEqual(1, mySet.size());
@@ -55,7 +55,7 @@ public class BlinqTest {
         List<Contact> lst = new List<Contact>{ new Contact(LastName = 'Wayne'), new Contact(LastName = 'Wayne') };
 
         Test.startTest();
-        Map<String, SObject> myMap = Blinq.my(lst).toStringMapOn('LastName');
+        Map<String, SObject> myMap = Blinq.my(lst).toStringMapOn(Contact.LastName);
         Test.stopTest();
 
         Assert.areEqual(1, myMap.size());
@@ -67,7 +67,7 @@ public class BlinqTest {
         List<Contact> lst = new List<Contact>{ new Contact(LastName = 'Wayne'), new Contact(LastName = 'Wayne') };
 
         Test.startTest();
-        Map<String, List<SObject>> myMap = Blinq.my(lst).toStringMapListOn('LastName');
+        Map<String, List<SObject>> myMap = Blinq.my(lst).toStringMapListOn(Contact.LastName);
         Test.stopTest();
 
         Assert.areEqual(1, myMap.size());
@@ -95,7 +95,7 @@ public class BlinqTest {
         List<Contact> lst = new List<Contact>{ new Contact(AccountId = '0015300000PFOIaAAP') };
 
         Test.startTest();
-        Map<Id, SObject> myMap = Blinq.my(lst).toIdMapOn('AccountId');
+        Map<Id, SObject> myMap = Blinq.my(lst).toIdMapOn(Contact.AccountId);
         Test.stopTest();
 
         Assert.areEqual(1, myMap.size());
@@ -110,7 +110,7 @@ public class BlinqTest {
         };
 
         Test.startTest();
-        Map<Id, List<SObject>> myMap = Blinq.my(lst).toIdMapListOn('AccountId');
+        Map<Id, List<SObject>> myMap = Blinq.my(lst).toIdMapListOn(Contact.AccountId);
         Test.stopTest();
 
         Assert.areEqual(1, myMap.size());
@@ -123,7 +123,7 @@ public class BlinqTest {
         List<Contact> lst = new List<Contact>{ new Contact(LastName = 'Wayne'), new Contact(LastName = 'Lane') };
 
         Test.startTest();
-        List<Contact> myLst = Blinq.my(lst).filterOn('LastName').equals('Wayne').toList();
+        List<Contact> myLst = Blinq.my(lst).filterOn(Contact.LastName).equals('Wayne').toList();
         Test.stopTest();
 
         Assert.areEqual(2, lst.size());
@@ -136,7 +136,7 @@ public class BlinqTest {
         List<Contact> lst = new List<Contact>{ new Contact(AccountId = '0015300000PFOIaAAP'), new Contact() };
 
         Test.startTest();
-        List<Contact> myLst = Blinq.my(lst).filterOn('AccountId').equals(null).toList();
+        List<Contact> myLst = Blinq.my(lst).filterOn(Contact.AccountId).equals(null).toList();
         Test.stopTest();
 
         Assert.areEqual(2, lst.size());
@@ -149,7 +149,7 @@ public class BlinqTest {
         List<Contact> lst = new List<Contact>{ new Contact(LastName = 'Wayne'), new Contact(LastName = 'Lane') };
 
         Test.startTest();
-        List<Contact> myLst = Blinq.my(lst).filterOn('LastName').notEquals('Wayne').toList();
+        List<Contact> myLst = Blinq.my(lst).filterOn(Contact.LastName).notEquals('Wayne').toList();
         Test.stopTest();
 
         Assert.areEqual(2, lst.size());
@@ -162,7 +162,7 @@ public class BlinqTest {
         List<Contact> lst = new List<Contact>{ new Contact(AccountId = '0015300000PFOIaAAP'), new Contact() };
 
         Test.startTest();
-        List<Contact> myLst = Blinq.my(lst).filterOn('AccountId').notEquals(null).toList();
+        List<Contact> myLst = Blinq.my(lst).filterOn(Contact.AccountId).notEquals(null).toList();
         Test.stopTest();
 
         Assert.areEqual(2, lst.size());
@@ -175,7 +175,7 @@ public class BlinqTest {
         List<Contact> lst = new List<Contact>{ new Contact(LastName = 'Wayne'), new Contact(LastName = 'Lane') };
 
         Test.startTest();
-        List<Contact> myLst = Blinq.my(lst).filterOn('LastName').greaterThan('Lane').toList();
+        List<Contact> myLst = Blinq.my(lst).filterOn(Contact.LastName).greaterThan('Lane').toList();
         Test.stopTest();
 
         Assert.areEqual(2, lst.size());
@@ -191,7 +191,7 @@ public class BlinqTest {
         };
 
         Test.startTest();
-        List<Contact> myLst = Blinq.my(lst).filterOn('Birthdate').greaterThan(Date.today().addYears(-30)).toList();
+        List<Contact> myLst = Blinq.my(lst).filterOn(Contact.Birthdate).greaterThan(Date.today().addYears(-30)).toList();
         Test.stopTest();
 
         Assert.areEqual(2, lst.size());
@@ -207,7 +207,7 @@ public class BlinqTest {
         };
 
         Test.startTest();
-        List<Contact> myLst = Blinq.my(lst).filterOn('MailingLongitude').greaterThan(300).toList();
+        List<Contact> myLst = Blinq.my(lst).filterOn(Contact.MailingLongitude).greaterThan(300).toList();
         Test.stopTest();
 
         Assert.areEqual(2, lst.size());
@@ -220,7 +220,7 @@ public class BlinqTest {
         List<Contact> lst = new List<Contact>{ new Contact(LastName = 'Wayne'), new Contact(LastName = 'Lane') };
 
         Test.startTest();
-        List<Contact> myLst = Blinq.my(lst).filterOn('LastName').greaterThanOrEqualTo('Wayne').toList();
+        List<Contact> myLst = Blinq.my(lst).filterOn(Contact.LastName).greaterThanOrEqualTo('Wayne').toList();
         Test.stopTest();
 
         Assert.areEqual(2, lst.size());
@@ -233,7 +233,7 @@ public class BlinqTest {
         List<Contact> lst = new List<Contact>{ new Contact(LastName = 'Wayne'), new Contact(LastName = 'Lane') };
 
         Test.startTest();
-        List<Contact> myLst = Blinq.my(lst).filterOn('LastName').lessThan('Wayne').toList();
+        List<Contact> myLst = Blinq.my(lst).filterOn(Contact.LastName).lessThan('Wayne').toList();
         Test.stopTest();
 
         Assert.areEqual(2, lst.size());
@@ -246,7 +246,7 @@ public class BlinqTest {
         List<Contact> lst = new List<Contact>{ new Contact(LastName = 'Wayne'), new Contact(LastName = 'Lane') };
 
         Test.startTest();
-        List<Contact> myLst = Blinq.my(lst).filterOn('LastName').lessThanOrEqualTo('Lane').toList();
+        List<Contact> myLst = Blinq.my(lst).filterOn(Contact.LastName).lessThanOrEqualTo('Lane').toList();
         Test.stopTest();
 
         Assert.areEqual(2, lst.size());
@@ -259,7 +259,7 @@ public class BlinqTest {
         List<Contact> lst = new List<Contact>{ new Contact(LastName = 'Wayne'), new Contact(LastName = 'Lane') };
 
         Test.startTest();
-        List<Contact> myLst = Blinq.my(lst).filterOn('LastName').startsWith('Way').toList();
+        List<Contact> myLst = Blinq.my(lst).filterOn(Contact.LastName).startsWith('Way').toList();
         Test.stopTest();
 
         Assert.areEqual(2, lst.size());
@@ -272,7 +272,7 @@ public class BlinqTest {
         List<Contact> lst = new List<Contact>{ new Contact(LastName = 'Wayne'), new Contact(LastName = 'Lane') };
 
         Test.startTest();
-        List<Contact> myLst = Blinq.my(lst).filterOn('LastName').endsWith('ne').toList();
+        List<Contact> myLst = Blinq.my(lst).filterOn(Contact.LastName).endsWith('ne').toList();
         Test.stopTest();
 
         Assert.areEqual(2, lst.size());
@@ -284,7 +284,7 @@ public class BlinqTest {
         List<Contact> lst = new List<Contact>{ new Contact(LastName = 'Wayne'), new Contact(LastName = 'Lane') };
 
         Test.startTest();
-        List<Contact> myLst = Blinq.my(lst).filterOn('LastName').contains('ayn').toList();
+        List<Contact> myLst = Blinq.my(lst).filterOn(Contact.LastName).contains('ayn').toList();
         Test.stopTest();
 
         Assert.areEqual(2, lst.size());
@@ -297,7 +297,7 @@ public class BlinqTest {
         List<Contact> lst = new List<Contact>{ new Contact(LastName = 'Wayne'), new Contact(LastName = 'Lane') };
 
         Test.startTest();
-        List<Contact> myLst = Blinq.my(lst).filterOn('LastName').isIn(new List<String>{ 'Wayne', 'Lane' }).toList();
+        List<Contact> myLst = Blinq.my(lst).filterOn(Contact.LastName).isIn(new List<String>{ 'Wayne', 'Lane' }).toList();
         Test.stopTest();
 
         Assert.areEqual(2, lst.size());
@@ -309,7 +309,7 @@ public class BlinqTest {
         List<Contact> lst = new List<Contact>{ new Contact(FirstName = null, LastName = 'Wayne'), new Contact(FirstName = 'Lois', LastName = 'Lane') };
 
         Test.startTest();
-        List<Contact> myLst = Blinq.my(lst).filterOn('FirstName').isNull().toList();
+        List<Contact> myLst = Blinq.my(lst).filterOn(Contact.FirstName).isNull().toList();
         Test.stopTest();
 
         Assert.areEqual(2, lst.size());
@@ -318,11 +318,11 @@ public class BlinqTest {
     }
 
     @IsTest
-    static void testisNotNull() {
+    static void testIsNotNull() {
         List<Contact> lst = new List<Contact>{ new Contact(FirstName = null, LastName = 'Wayne'), new Contact(FirstName = 'Lois', LastName = 'Lane') };
 
         Test.startTest();
-        List<Contact> myLst = Blinq.my(lst).filterOn('FirstName').isNotNull().toList();
+        List<Contact> myLst = Blinq.my(lst).filterOn(Contact.FirstName).isNotNull().toList();
         Test.stopTest();
 
         Assert.areEqual(2, lst.size());
@@ -366,10 +366,10 @@ public class BlinqTest {
         Test.startTest();
         List<Contact> myLst = Blinq.my(lst)
             .leftJoin(oldMap, 'old')
-            .filterOn('FirstName')
-            .notEquals('old', 'FirstName')
-            .filterOn('LastName')
-            .notEquals('old', 'LastName')
+            .filterOn(Contact.FirstName)
+            .notEquals('old', Contact.FirstName)
+            .filterOn(Contact.LastName)
+            .notEquals('old', Contact.LastName)
             .any()
             .toList();
         Test.stopTest();
@@ -392,10 +392,10 @@ public class BlinqTest {
         Test.startTest();
         List<Contact> myLst = Blinq.my(lst)
             .leftJoin(oldMap, 'old')
-            .filterOn('FirstName')
-            .Equals('old', 'FirstName')
-            .filterOn('LastName')
-            .Equals('old', 'LastName')
+            .filterOn(Contact.FirstName)
+            .Equals('old', Contact.FirstName)
+            .filterOn(Contact.LastName)
+            .Equals('old', Contact.LastName)
             .all()
             .toList();
         Test.stopTest();
@@ -418,8 +418,8 @@ public class BlinqTest {
         Test.startTest();
         List<Contact> myLst = Blinq.my(lst)
             .leftJoin(oldMap, 'old')
-            .filterOn('AccountId').equals('0015300000PFOIaAAP')
-            .filterOn('LastName').equals('Lane')
+            .filterOn(Contact.AccountId).equals('0015300000PFOIaAAP')
+            .filterOn(Contact.LastName).equals('Lane')
             .customLogic('1 AND NOT 2')
             .toList();
         Test.stopTest();
@@ -486,7 +486,7 @@ public class BlinqTest {
         Test.startTest();
         List<Contact> myLst = Blinq.my(lst)
             .leftJoin(oldMap, 'old')
-            .filterOn('old', 'Id')
+            .filterOn('old', Contact.Id)
             .Equals(null)
             .toList();
         Test.stopTest();

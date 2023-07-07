@@ -22,6 +22,10 @@ global class Blinq {
         return this.objList;
     }
 
+    global Set<String> toStringSetOn(Schema.SObjectField field) {
+        return toStringSetOn(field.getDescribe().getName());
+    }
+
     global Set<String> toStringSetOn(String fieldName) {
         tryFilter();
         Set<String> objSet = new Set<String>();
@@ -36,6 +40,10 @@ global class Blinq {
         return toIdSetOn('Id');
     }
 
+    global Set<Id> toIdSetOn(Schema.SObjectField field) {
+        return toIdSetOn(field.getDescribe().getName());
+    }
+
     global Set<Id> toIdSetOn(String fieldName) {
         tryFilter();
         Set<Id> objSet = new Set<Id>();
@@ -45,6 +53,10 @@ global class Blinq {
         return objSet;
     }
 
+    global Map<String, SObject> toStringMapOn(Schema.SObjectField field) {
+        return toStringMapOn(field.getDescribe().getName());
+    }
+
     global Map<String, SObject> toStringMapOn(String fieldName) {
         tryFilter();
         Map<String, SObject> objMap = new Map<String, SObject>();
@@ -52,6 +64,10 @@ global class Blinq {
             objMap.put((String) BlinqFieldValue.resolve(sobj, fieldName), sobj);
         }
         return objMap;
+    }
+
+    global Map<String, List<SObject>> toStringMapListOn(Schema.SObjectField field) {
+        return toStringMapListOn(field.getDescribe().getName());
     }
 
     global Map<String, List<SObject>> toStringMapListOn(String fieldName) {
@@ -74,6 +90,10 @@ global class Blinq {
         return toIdMapOn('Id');
     }
 
+    global Map<Id, SObject> toIdMapOn(Schema.SObjectField field) {
+        return toIdMapOn(field.getDescribe().getName());
+    }
+
     global Map<Id, SObject> toIdMapOn(String fieldName) {
         tryFilter();
         Map<Id, SObject> objMap = new Map<Id, SObject>();
@@ -81,6 +101,10 @@ global class Blinq {
             objMap.put((Id) BlinqFieldValue.resolve(sobj, fieldName), sobj);
         }
         return objMap;
+    }
+
+    global Map<Id, List<SObject>> toIdMapListOn(Schema.SObjectField field) {
+        return toIdMapListOn(field.getDescribe().getName());
     }
 
     global Map<Id, List<SObject>> toIdMapListOn(String fieldName) {
@@ -98,10 +122,18 @@ global class Blinq {
         return objListMap;
     }
 
+    global BlinqFilter filterOn(Schema.SObjectField field) {
+        return filterOn(field.getDescribe().getName());
+    }
+
     global BlinqFilter filterOn(String fieldName) {
         BlinqFilter filter = new BlinqFilter(this, fieldName);
         this.filterList.add(filter);
         return filter;
+    }
+
+    global BlinqFilter filterOn(String alias, Schema.SObjectField field) {
+        return filterOn(alias, field.getDescribe().getName());
     }
 
     global BlinqFilter filterOn(String alias, String fieldName) {
