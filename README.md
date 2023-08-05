@@ -50,4 +50,11 @@ List<Contact> filtered = Blinq.my(contacts)
     .filterOn(Contact.AccountId).isNull()
     .customLogic('1 OR (2 AND 3)')
     .toList();
+
+// Set values and sobjects in a collection
+Account acct = [SELECT Id FROM Account LIMIT 1];
+List<Contact> myLst = Blinq.my(contacts)
+    .setValue(Contact.AccountId, acct.Id)
+    .setSObject(Contact.AccountId, acct)
+    .toList();
 ```
