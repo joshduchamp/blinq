@@ -143,41 +143,20 @@ global class Blinq {
     }
 
     global Blinq any() {
-        this.filtersExecuted = true;
-        if (!this.filterList.isEmpty()) {
-            List<SObject> filteredObjects = new List<SObject>();
-            for (SObject sobj : this.objList) {
-                for (BlinqFilter filter : this.filterList) {
-                    if (filter.result(sobj, this.joinMap)) {
-                        filteredObjects.add(sobj);
-                        break;
-                    }
-                }
-            }
-            this.objList = filteredObjects;
-        }
-        return this;
+        return customLogic(buildLogic('OR'));
     }
     
     global Blinq all() {
-        this.filtersExecuted = true;
-        if (!this.filterList.isEmpty()) {
-            List<SObject> filteredObjects = new List<SObject>();
-            for (SObject sobj : this.objList) {
-                Boolean allFiltersTrue = true;
-                for (BlinqFilter filter : this.filterList) {
-                    if (!filter.result(sobj, this.joinMap)) {
-                        allFiltersTrue = false;
-                        break;
-                    }
-                }
-                if (allFiltersTrue) {
-                    filteredObjects.add(sobj);
-                }
-            }
-            this.objList = filteredObjects;
+        return customLogic(buildLogic('AND'));
+    }
+
+    private String buildLogic(String op) {
+        List<String> lst = new List<String>();
+        for (Integer i = 1; i <= this.filterList.size(); i++) {
+            lst.add(String.valueOf(i));
         }
-        return this;
+        String logic = String.join(lst, ' ' + op + ' ');
+        return logic;
     }
 
     global Blinq customLogic(String conditionalLogic) {
@@ -190,11 +169,42 @@ global class Blinq {
                     values.add(filter.result(sobj, this.joinMap));
                 }
                 if (BlinqLogic.evaluate(conditionalLogic, values)) {
+                    applyValues(sobj);
+                    applySObjects(sobj);
                     filteredObjects.add(sobj);
                 }
             }
             this.objList = filteredObjects;
+        } else {
+            for (SObject sobj : this.objList) {
+                applyValues(sobj);
+                applySObjects(sobj);
+            }
         }
+        return this;
+    }
+
+    private void applyValues(SObject sobj) {
+        for (Schema.SObjectField field : this.setValueMap.keySet()) {
+            sobj.put(field, this.setValueMap.get(field));
+        }
+    }
+
+    private Map<Schema.SObjectField, Object> setValueMap = new Map<Schema.SObjectField, Object>();
+    global Blinq setValue(Schema.SObjectField field, Object value) {
+        this.setValueMap.put(field, value);
+        return this;
+    }
+
+    private void applySObjects(SObject sobj) {
+        for (Schema.SObjectField field : this.setSObjectMap.keySet()) {
+            sobj.putSObject(field, this.setSObjectMap.get(field));
+        }
+    }
+
+    private Map<Schema.SObjectField, SObject> setSObjectMap = new Map<Schema.SObjectField, SObject>();
+    global Blinq setSOBject(Schema.SObjectField field, SObject sobj) {
+        this.setSObjectMap.put(field, sobj);
         return this;
     }
 

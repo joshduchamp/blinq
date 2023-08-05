@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types>
+        <members>Blinq</members>
+        <members>BlinqCompareContains</members>
+        <members>BlinqCompareEndsWith</members>
+        <members>BlinqCompareEquals</members>
+        <members>BlinqCompareGreaterThan</members>
+        <members>BlinqCompareGreaterThanOrEqualTo</members>
+        <members>BlinqCompareIsIn</members>
+        <members>BlinqCompareLessThan</members>
+        <members>BlinqCompareLessThanOrEqualTo</members>
+        <members>BlinqCompareNotEquals</members>
+        <members>BlinqCompareStartsWith</members>
+        <members>BlinqException</members>
+        <members>BlinqFieldValue</members>
+        <members>BlinqFilter</members>
+        <members>BlinqLogic</members>
+        <members>BlinqLogicTest</members>
+        <members>BlinqTest</members>
+        <members>IBlinqCompare</members>
+        <name>ApexClass</name>
+    </types>
+    <version>58.0</version>
+</Package>

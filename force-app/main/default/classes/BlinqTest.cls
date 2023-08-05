@@ -495,4 +495,31 @@ public class BlinqTest {
         Assert.areEqual(1, myLst.size());
         Assert.areEqual('Lane', myLst[0].LastName);
     }
+
+    @IsTest
+    static void testSetValue() {
+        List<Contact> lst = new List<Contact> {
+            new Contact(Id = '0035300000H2LFdAAN', LastName = 'Wayne')
+        };
+
+        Test.startTest();
+        List<Contact> myLst = Blinq.my(lst).setValue(Contact.FirstName, 'Bruce').toList();
+        Test.stopTest();
+
+        Assert.areEqual('Bruce', myLst[0].FirstName);
+    }
+
+    @IsTest
+    static void testSetSObject() {
+        List<Contact> lst = new List<Contact> {
+            new Contact(Id = '0035300000H2LFdAAN', LastName = 'Wayne')
+        };
+        Account acct = new Account(Name = 'Test Account');
+
+        Test.startTest();
+        List<Contact> myLst = Blinq.my(lst).setSObject(Contact.AccountId, acct).toList();
+        Test.stopTest();
+
+        Assert.isNotNull(myLst[0].Account);
+    }
 }
